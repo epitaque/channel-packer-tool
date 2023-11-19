@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://nud6dwjcnj5v"]
 
-[node name="Control" type="Control"]
+[node name="ChannelPacker" type="Control"]
 layout_mode = 3
 anchor_right = 0.513
 anchor_bottom = 1.0
