@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bqxr6s1beepr0"
-path="res://.godot/imported/albedo_packed.png-e1a2c3c4863494836572c2782765771f.ctex"
+uid="uid://drte4kbgjhj62"
+path="res://.godot/imported/albedo_height_packed.png-03f88eba7df99ef55793f3a84504a4a3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://test_texture/albedo_packed.png"
-dest_files=["res://.godot/imported/albedo_packed.png-e1a2c3c4863494836572c2782765771f.ctex"]
+source_file="res://test_texture/albedo_height_packed.png"
+dest_files=["res://.godot/imported/albedo_height_packed.png-03f88eba7df99ef55793f3a84504a4a3.ctex"]
 
 [params]
 

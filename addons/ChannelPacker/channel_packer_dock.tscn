@@ -20,38 +20,39 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="Panel" type="Panel" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 size_flags_vertical = 0
 
-[node name="Label" type="Label" parent="MarginContainer/Panel/VBoxContainer"]
+[node name="HeadingLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Channel Packer for Terrain3D"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="MarginContainer/Panel/VBoxContainer"]
+[node name="FolderLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Folder with Textures"
 
-[node name="TextEdit" type="TextEdit" parent="MarginContainer/Panel/VBoxContainer"]
-custom_minimum_size = Vector2(0, 44)
+[node name="FolderLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 placeholder_text = "res://..."
 
-[node name="ErrorLabel" type="RichTextLabel" parent="MarginContainer/Panel/VBoxContainer"]
+[node name="ErrorLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/default_color = Color(0.909804, 0, 0, 1)
 text = "Errors go here!"
 fit_content = true
 
-[node name="Button" type="Button" parent="MarginContainer/Panel/VBoxContainer"]
+[node name="SuccessLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Pack"
+theme_override_colors/default_color = Color(0, 0.588235, 0.141176, 1)
+text = "Success notifications go here!"
+fit_content = true
+
+[node name="PackAlbedoButton" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Pack Albedo + Height"
+
+[node name="PackNormalButton" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Pack Normal + Roughness"
