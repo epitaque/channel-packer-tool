@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://nud6dwjcnj5v"]
+
+[node name="ChannelPackerDock" type="Panel"]
+custom_minimum_size = Vector2(500, 200)
+offset_right = 100.0
+offset_bottom = 100.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_right = 423.0
+offset_bottom = 40.0
+text = "Parent Folder"
+
+[node name="TextEdit" type="TextEdit" parent="."]
+layout_mode = 2
+offset_left = 5.0
+offset_top = 43.0
+offset_right = 429.0
+offset_bottom = 157.0
+placeholder_text = "res://..."
+
+[node name="ErrorLabel" type="RichTextLabel" parent="."]
+offset_left = 7.0
+offset_top = 119.0
+offset_right = 489.0
+offset_bottom = 316.0
+theme_override_colors/default_color = Color(0.909804, 0, 0, 1)
+text = "Errors go here!"
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+offset_left = 12.0
+offset_top = 311.0
+offset_right = 235.0
+offset_bottom = 342.0
+text = "Pack"
