@@ -24,46 +24,25 @@ theme_override_constants/margin_bottom = 5
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="HeadingLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="ChannelPackerHeading" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Channel Packer for Terrain3D"
-horizontal_alignment = 1
+bbcode_enabled = true
+text = "[center][b]Channel Packer for Terrain3D[/b][/center]"
+fit_content = true
 
-[node name="RGB Channels" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="RGBChannelsLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "RGB Channel"
+text = "RGB Channel (albedo or normal)"
 
 [node name="RGBChannelHBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="FileLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/RGBChannelHBox"]
-visible = false
+[node name="AlphaChannelLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "res://..."
-
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/RGBChannelHBox"]
-visible = false
-layout_mode = 2
-text = "Select File"
-
-[node name="RGB Channels2" type="Label" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Alpha Channel"
+text = "Alpha Channel (height or roughness)"
 
 [node name="AlphaChannelHBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-
-[node name="FileLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/AlphaChannelHBox"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "res://..."
-
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/AlphaChannelHBox"]
-visible = false
-layout_mode = 2
-text = "Select File"
 
 [node name="ErrorLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
