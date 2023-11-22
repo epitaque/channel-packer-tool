@@ -29,13 +29,41 @@ layout_mode = 2
 text = "Channel Packer for Terrain3D"
 horizontal_alignment = 1
 
-[node name="FolderLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="RGB Channels" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Folder with Textures"
+text = "RGB Channel"
 
-[node name="FolderLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+[node name="RGBChannelHBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+
+[node name="FileLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/RGBChannelHBox"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
 placeholder_text = "res://..."
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/RGBChannelHBox"]
+visible = false
+layout_mode = 2
+text = "Select File"
+
+[node name="RGB Channels2" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Alpha Channel"
+
+[node name="AlphaChannelHBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="FileLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/AlphaChannelHBox"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "res://..."
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/AlphaChannelHBox"]
+visible = false
+layout_mode = 2
+text = "Select File"
 
 [node name="ErrorLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -49,10 +77,6 @@ theme_override_colors/default_color = Color(0, 0.588235, 0.141176, 1)
 text = "Success notifications go here!"
 fit_content = true
 
-[node name="PackAlbedoButton" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="PackButton" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Pack Albedo + Height"
-
-[node name="PackNormalButton" type="Button" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Pack Normal + Roughness"
+text = "Pack"

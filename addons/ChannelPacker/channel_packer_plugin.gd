@@ -3,13 +3,35 @@ extends EditorPlugin
 
 var dock
 var prefix = "./MarginContainer/VBoxContainer/"
+var file_dialog
+var rgb_resource_picker
+var a_resource_picker
 
 func _enter_tree():
 	dock = preload("res://addons/ChannelPacker/channel_packer_dock.tscn").instantiate()
 	add_control_to_dock(DOCK_SLOT_LEFT_UL, dock)
-	(dock.get_node(prefix + "PackAlbedoButton") as Button).connect("pressed", _on_pack_albedo_button_pressed)
-	(dock.get_node(prefix + "PackNormalButton") as Button).connect("pressed", _on_pack_normal_button_pressed)
+	file_dialog = EditorFileDialog.new()
+
+	var editor_interface = get_editor_interface()
+	var base_control = editor_interface.get_base_control()
+
+	file_dialog.mode = EditorFileDialog.FILE_MODE_SAVE_FILE
+	file_dialog.access = EditorFileDialog.ACCESS_FILESYSTEM
+	file_dialog.connect("file_selected", _on_SaveFileDialog_file_selected)
+	base_control.add_child(file_dialog)
+
+	rgb_resource_picker = EditorResourcePicker.new()
+	a_resource_picker = EditorResourcePicker.new()
+
+	rgb_resource_picker
+
+	dock.get_node(prefix + "RGBChannelHBox/FileLineEdit").add_child(rgb_resource_picker)
+	dock.get_node(prefix + "AlphaChannelHBox/FileLineEdit").add_child(a_resource_picker)
+
+
+	(dock.get_node(prefix + "PackButton") as Button).connect("pressed", _on_pack_button_pressed)
 	hide_notifs()
+	
 
 func hide_notifs():
 	(dock.get_node(prefix + "ErrorLabel") as RichTextLabel).visible = false
@@ -23,28 +45,9 @@ func show_success(text: String):
 	(dock.get_node(prefix + "SuccessLabel") as RichTextLabel).visible = true
 	(dock.get_node(prefix + "SuccessLabel") as RichTextLabel).text = text
 
-func pack_textures(base_path: String, rgb_ending: String, a_ending: String, dest_name: String):
-	var rgb_path = ""
-	var a_path = ""
+func pack_textures(rgb_path: String, a_path: String, dst_path: String):
 	var error_text = ""
-	var files = DirAccess.get_files_at(base_path)
 	hide_notifs()
-
-	for file in files:
-		var noext = file.get_basename()
-		if noext.ends_with(rgb_ending):
-			rgb_path = base_path + file
-		elif noext.ends_with(a_ending):
-			a_path = base_path + file
-
-	if rgb_path == "":
-		error_text += "No texture ending in " + rgb_ending + " in path: " + base_path + "\n"
-	if a_path == "":
-		error_text += "No texture ending in " + a_ending + " in path: " + base_path + "\n"
-	if error_text != "":
-		show_error(error_text)
-		print(error_text)
-		return
 
 	var rgb_image_resource: CompressedTexture2D = load(rgb_path) as CompressedTexture2D
 	var a_image_resource: CompressedTexture2D = load(a_path) as CompressedTexture2D
@@ -74,25 +77,21 @@ func pack_textures(base_path: String, rgb_ending: String, a_ending: String, dest
 
 				output_image.set_pixel(x, y, Color(rgb.r, rgb.g, rgb.b, a))
 
-		var dst_path = base_path + dest_name + ".png"
 		show_success("Packed RGB channels from " + rgb_path + " and R from " + a_path + " into " + dst_path)
-		output_image.save_png(base_path + dest_name)
+		output_image.save_png(dst_path)
 	else:
 		print("Failed to load one or more textures.")
 
-func _on_pack_normal_button_pressed():
-	var path = (dock.get_node(prefix + "FolderLineEdit") as LineEdit).text
-	if not path.ends_with("/"):
-		path += "/"
+func _on_pack_button_pressed():
+	var rgb_path = (dock.get_node(prefix + "RGBChannelHBox/FileLineEdit") as LineEdit).text
 
-	pack_textures(path, "_normal", "_roughness", "normal_roughness_packed")
+	file_dialog.popup_centered_ratio()
 
-func _on_pack_albedo_button_pressed():
-	var path = (dock.get_node(prefix + "FolderLineEdit") as LineEdit).text
-	if not path.ends_with("/"):
-		path += "/"
-
-	pack_textures(path, "_albedo", "_height", "albedo_height_packed") 
+# Signal handler for when a file is selected
+func _on_SaveFileDialog_file_selected(dst_path):
+	var rgb_path = (dock.get_node(prefix + "RGBChannelHBox/FileLineEdit") as LineEdit).text
+	var a_path = (dock.get_node(prefix + "AlphaChannelHBox/FileLineEdit") as LineEdit).text
+	pack_textures(rgb_path, a_path, dst_path)
 
 func _exit_tree():
 	remove_control_from_docks(dock)
