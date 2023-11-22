@@ -4,8 +4,10 @@ extends EditorPlugin
 var dock
 var prefix = "./MarginContainer/VBoxContainer/"
 var file_dialog: EditorFileDialog
-var rgb_resource_picker: EditorResourcePicker
-var a_resource_picker: EditorResourcePicker
+var albedo_resource_picker: EditorResourcePicker
+var height_resource_picker: EditorResourcePicker
+var normal_resource_picker: EditorResourcePicker
+var roughness_resource_picker: EditorResourcePicker
 
 func _enter_tree():
 	dock = preload("res://addons/ChannelPacker/channel_packer_dock.tscn").instantiate()
@@ -21,19 +23,20 @@ func _enter_tree():
 	file_dialog.connect("file_selected", _on_SaveFileDialog_file_selected)
 	base_control.add_child(file_dialog)
 
-	# setup resource pickers
-	rgb_resource_picker = EditorResourcePicker.new()
-	a_resource_picker = EditorResourcePicker.new()
-	rgb_resource_picker.base_type = "Texture2D"
-	a_resource_picker.base_type = "Texture2D"
-	rgb_resource_picker.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	a_resource_picker.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	albedo_resource_picker = make_texture_picker(dock.get_node(prefix + "AlbedoHBox"), "Albedo")
+	height_resource_picker = make_texture_picker(dock.get_node(prefix + "HeightHBox"), "Height")
+	normal_resource_picker = make_texture_picker(dock.get_node(prefix + "NormalHBox"), "Normal")
+	roughness_resource_picker = make_texture_picker(dock.get_node(prefix + "RoughnessHBox"), "Roughness")
 
-	dock.get_node(prefix + "RGBChannelHBox").add_child(rgb_resource_picker)
-	dock.get_node(prefix + "AlphaChannelHBox").add_child(a_resource_picker)
 	(dock.get_node(prefix + "PackButton") as Button).connect("pressed", _on_pack_button_pressed)
 	hide_notifs()
 	
+func make_texture_picker(parent, label_text):
+	var picker = EditorResourcePicker.new()
+	picker.base_type = "Texture2D"
+	picker.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	parent.add_child(picker)
+	return picker
 
 func hide_notifs():
 	(dock.get_node(prefix + "ErrorLabel") as RichTextLabel).visible = false
@@ -49,12 +52,7 @@ func show_success(text: String):
 	(dock.get_node(prefix + "SuccessLabel") as RichTextLabel).visible = true
 	(dock.get_node(prefix + "SuccessLabel") as RichTextLabel).text = text
 
-func pack_textures(dst_path: String):
-	hide_notifs()
-
-	var rgb_image_resource: CompressedTexture2D = rgb_resource_picker.edited_resource as CompressedTexture2D
-	var a_image_resource: CompressedTexture2D = a_resource_picker.edited_resource as CompressedTexture2D
-
+func pack_textures(rgb_image_resource: CompressedTexture2D, a_image_resource: CompressedTexture2D, dst_path: String):
 	if rgb_image_resource and a_image_resource:
 		var rgb_image = rgb_image_resource.get_image()
 		var a_image = a_image_resource.get_image()
@@ -76,20 +74,45 @@ func pack_textures(dst_path: String):
 	else:
 		show_error("Failed to load one or more textures.")
 
+var packing_albedo = false
+var queue_pack_normal_roughness
 func _on_pack_button_pressed():
-	if not rgb_resource_picker.edited_resource:
-		show_error("No RGB texture selected.")
-		return
-	if not a_resource_picker.edited_resource:
-		show_error("No Alpha texture selected.")
-		return
+	hide_notifs()
+	var albedo_resource = albedo_resource_picker.edited_resource
+	var height_resource = height_resource_picker.edited_resource
+	var normal_resource = normal_resource_picker.edited_resource
+	var roughness_resource = roughness_resource_picker.edited_resource
 
-	file_dialog.current_path = rgb_resource_picker.edited_resource.resource_path.get_base_dir() + "/"
-	file_dialog.popup_centered_ratio()
+	if albedo_resource and height_resource:
+		packing_albedo = true
+		file_dialog.current_path = albedo_resource.resource_path.get_base_dir() + "/packed_albedo_height"
+		file_dialog.title = "Save Packed Albedo/Height Texture"
+		file_dialog.popup_centered_ratio()
+
+		if normal_resource and roughness_resource:
+			queue_pack_normal_roughness = true
+	elif normal_resource and roughness_resource:
+		packing_albedo = false
+		file_dialog.current_path = normal_resource.resource_path.get_base_dir() + "/packed_normal_roughness"
+		file_dialog.title = "Save Packed Normal/Roughness Texture"
+		file_dialog.popup_centered_ratio()
+	
+	if not (albedo_resource and height_resource) and not (normal_resource and roughness_resource):
+		show_error("Please select an albedo and height texture or a normal and roughness texture.")
 
 # Signal handler for when a file is selected
 func _on_SaveFileDialog_file_selected(dst_path):
-	pack_textures(dst_path)
+	if packing_albedo:
+		pack_textures(albedo_resource_picker.edited_resource, height_resource_picker.edited_resource, dst_path)
+	else:
+		pack_textures(normal_resource_picker.edited_resource, roughness_resource_picker.edited_resource, dst_path)
+	
+	if queue_pack_normal_roughness:
+		queue_pack_normal_roughness = false
+		packing_albedo = false
+		file_dialog.current_path = normal_resource_picker.edited_resource.resource_path.get_base_dir() + "/packed_normal_roughness"
+		file_dialog.title = "Save Packed Normal/Roughness Texture"
+		file_dialog.popup_centered_ratio()
 
 func _exit_tree():
 	remove_control_from_docks(dock)

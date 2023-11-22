@@ -30,18 +30,32 @@ bbcode_enabled = true
 text = "[center][b]Channel Packer for Terrain3D[/b][/center]"
 fit_content = true
 
-[node name="RGBChannelsLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="AlbedoLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "RGB Channel (albedo or normal)"
+text = "Albedo"
 
-[node name="RGBChannelHBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="AlbedoHBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="AlphaChannelLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="HeightLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Alpha Channel (height or roughness)"
+text = "Height"
 
-[node name="AlphaChannelHBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="HeightHBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="NormalLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Normal"
+
+[node name="NormalHBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RoughnessLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Roughness"
+
+[node name="RoughnessHBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="ErrorLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
